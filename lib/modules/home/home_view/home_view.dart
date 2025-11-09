@@ -1,8 +1,6 @@
 import 'package:email_auth_firebase_learn/utils/app_color.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import '../../common_widgets/custom_button.dart';
-import '../../common_widgets/custom_text_field.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -12,63 +10,46 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  User? user;
 
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    user = FirebaseAuth.instance.currentUser;
+  }
+
+  signOut() async {
+    await FirebaseAuth.instance.signOut();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: AppColor.textFieldColor,
+        title: const Text(
+          "Home View",
+          style: TextStyle(color: Colors.white, fontSize: 20),
+        ),
+        centerTitle: true,
+      ),
       backgroundColor: AppColor.backgroundColor,
-    
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Center(
-              child: Column(
-                // mainAxisAlignment: MainAxisAlignment.center,
-                // crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-              
-                  CustomTextField(
-                    controller: emailController,
-                    prefix: Icons.email_outlined,
-                    hintText: "Email",
 
-                  ),
-                        
-                  SizedBox(
-                    height: 20,
-                  ),
-                        
-                  CustomTextField(
-                    controller: passwordController,
-                    prefix: Icons.password_outlined,
-                    hintText: "Password",
-                  ),
-                        
-                  SizedBox(
-                    height: 20,
-                  ),
-                        
-                        
-                  CustomButton(
-                    buttonText: "Login",
-                    onTap: (){
-                      print(emailController);
-                    },
-                  ),
-                        
-                        
-                        
-                ],
-              ),
-            ),
+      body: SafeArea(
+        child: Center(
+          child: Text(
+            user?.email ?? "No Email Found",
+            style: const TextStyle(fontSize: 20, color: Colors.white),
           ),
         ),
       ),
-    
+
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          signOut();
+        },
+        child: const Icon(Icons.logout),
+      ),
     );
   }
 }

@@ -39,6 +39,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             const SizedBox(width: 10),
             Expanded(
               child: TextField(
+                style: TextStyle(color: AppColor.textColor),
                 controller: widget.controller,
                 cursorColor: AppColor.myWhite,
                 keyboardType: widget.keyboardType,
